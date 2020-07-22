@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class CoreDataHabitsManager {
+final class CoreDataHabitsManager {
     
     private enum Constants {
         static let habitModelName = "HabitsModel"
@@ -61,9 +61,8 @@ class CoreDataHabitsManager {
             return habits
         } catch let failedToGetHabitsError {
             print("\(failedToGetHabitsError)")
+            return nil
         }
-        
-        return nil
     }
     
     func fetchHabit(withName name: String) -> HabitDB? {
@@ -77,9 +76,8 @@ class CoreDataHabitsManager {
             return habit.first
         } catch let failedToGetHabitsError {
             print("\(failedToGetHabitsError)")
+            return nil
         }
-        
-        return nil
     }
     
     func updateHabit(habit: HabitDB) {

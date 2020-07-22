@@ -20,6 +20,8 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         static let buttonHeight: CGFloat = 50
         static let buttonWidth: CGFloat = 200
         static let buttonMult: CGFloat = 1.25
+        static let calendarX: CGFloat = 0
+        static let calendarY: CGFloat = 0
     }
     
     let habitInfoView = UIView()
@@ -38,21 +40,29 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         // Do any additional setup after loading the view.
         
         setupUI()
-        setupDateFormatter()
-        setupViewData()
-        setupTextView()
-        setupCalendar()
-        
-        setTextViewConstraints()
-        setCalendarConstraints()
     }
     
     func setupDateFormatter() {
         dateFormatter.setFormat(DateFormatConst.dateFormat)
     }
     
-    func setupUI() {
+    func setupView() {
         view.backgroundColor = .white
+        
+        setupDateFormatter()
+        setupViewData()
+        setupTextView()
+        setupCalendar()
+    }
+    
+    func setupUI() {
+        setupView()
+        setConstraints()
+    }
+    
+    func setConstraints() {
+        setTextViewConstraints()
+        setCalendarConstraints()
     }
     
     func setupViewData() {
@@ -109,10 +119,7 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         // turn off the possible swipes
         calendar.isUserInteractionEnabled = false
         
-        let calendarX: CGFloat = 0
-        let calendarY: CGFloat = 0
-        
-        calendar.frame = CGRect(x: calendarX, y: calendarY, width: Constants.calendarSize, height: Constants.calendarSize)
+        calendar.frame = CGRect(x: Constants.calendarX, y: Constants.calendarY, width: Constants.calendarSize, height: Constants.calendarSize)
         view.addSubview(calendar)
     }
     

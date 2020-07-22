@@ -9,13 +9,11 @@
 
 import UIKit
 
-protocol HabitsViewControllerDelegate: class {
+protocol HabitsViewControllerDelegate: AnyObject {
     func addedNewHabitInList(controller: HabitViewController)
 }
 
 final class HabitViewController: UIViewController, UITextFieldDelegate {
-    
-    weak var delegate: HabitsListViewController?
     
     // consts
     private enum Constants {
@@ -26,28 +24,44 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
         
         static let initHabitTypeValue: HabitsType = .sporty
         static let constraint: CGFloat = 200
+        static let segmentX: CGFloat = 20
+        static let segmentY: CGFloat = 20
+        static let segmentHeight: CGFloat = 30
+        static let segmentIndex = 1
+        static let segmentTopAnchor: CGFloat = 50
+        static let segmentBotAnchor: CGFloat = 20
     }
     
-    //  let
+    weak var delegate: HabitsViewControllerDelegate?
+    
     let segmentTypeControl = UISegmentedControl(items: Constants.segmentItems)
     let acceptButton = UIButton(type: .roundedRect)
     let habitNameTextField = UITextField()
     let habitTypeView = UIView()
     let habitMotivationTextField = UITextField()
-    //var habit: HabitDB!
     var habitType: HabitsType = Constants.initHabitTypeValue
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        setupUI()
+    }
+    
+    func setupUI() {
         view.backgroundColor = .white
-        
-        setHabitNameTextField()
-        setHabitMotivationTextField()
-        setAcceptButton()
-        setSegmentControl()
-        setHabitTypeView()
-        
+        setupView()
+        setConstraints()
+    }
+    
+    func setupView() {
+        setupHabitNameTextField()
+        setupHabitMotivationTextField()
+        setupAcceptButton()
+        setupSegmentControl()
+        setupHabitTypeView()
+    }
+    
+    func setConstraints() {
         setNameTextFieldConstraints()
         setMotivationTextFieldConstraints()
         setTypeViewConstraints()
@@ -55,45 +69,39 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
         setSegmentedControlConstraints()
     }
     
-    
-    func setSegmentControl() {
-        let segmentX: CGFloat = 20
-        let segmentY: CGFloat = 20
-        let segmentHeight: CGFloat = 30
-        let segmentIndex = 1
-        
-        segmentTypeControl.frame = CGRect(x: segmentX, y: segmentY, width: habitTypeView.frame.width, height: segmentHeight)
+    func setupSegmentControl() {
+        segmentTypeControl.frame = CGRect(x: Constants.segmentX, y: Constants.segmentY, width: habitTypeView.frame.width, height: Constants.segmentHeight)
         segmentTypeControl.addTarget(self, action: #selector(segmentAction), for: .valueChanged)
-        segmentTypeControl.selectedSegmentIndex = segmentIndex
+        segmentTypeControl.selectedSegmentIndex = Constants.segmentIndex
         habitTypeView.addSubview(segmentTypeControl)
     }
     
-    func setAcceptButton() {
+    func setupAcceptButton() {
         acceptButton.setTitle(Constants.acceptButtonText, for: .normal)
         acceptButton.addTarget(self, action: #selector(acceptClicked), for: .touchUpInside)
         habitTypeView.addSubview(acceptButton)
     }
     
-    func setHabitTypeView() {
-        view.addSubview(habitTypeView)
+    func setupHabitTypeView() {
         habitTypeView.backgroundColor = .blue
+        view.addSubview(habitTypeView)
     }
     
-    func setHabitNameTextField() {
-        view.addSubview(habitNameTextField)
+    func setupHabitNameTextField() {
         habitNameTextField.text = Constants.initHabitNameText
         habitNameTextField.textAlignment = .center
         habitNameTextField.layer.borderColor = UIColor.black.cgColor
         habitNameTextField.borderStyle = .roundedRect
-        habitNameTextField.backgroundColor = .white
+        habitNameTextField.backgroundColor = Constants.initHabitTypeValue.color
+        view.addSubview(habitNameTextField)
     }
     
-    func setHabitMotivationTextField() {
-        view.addSubview(habitMotivationTextField)
+    func setupHabitMotivationTextField() {
         habitMotivationTextField.backgroundColor = .yellow
         habitMotivationTextField.text = Constants.initHabitMotivationText
         habitMotivationTextField.textAlignment = .center
         habitNameTextField.borderStyle = .roundedRect
+        view.addSubview(habitMotivationTextField)
     }
     
     @objc private func segmentAction() {
@@ -164,14 +172,12 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setSegmentedControlConstraints() {
-        let topAnchorConst: CGFloat = 50
-        let botAnchorConst: CGFloat = 20
         
         segmentTypeControl.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            segmentTypeControl.bottomAnchor.constraint(lessThanOrEqualTo: acceptButton.topAnchor, constant: botAnchorConst),
+            segmentTypeControl.bottomAnchor.constraint(lessThanOrEqualTo: acceptButton.topAnchor, constant: Constants.segmentBotAnchor),
             segmentTypeControl.widthAnchor.constraint(equalTo: habitTypeView.widthAnchor),
-            segmentTypeControl.topAnchor.constraint(equalTo: habitTypeView.topAnchor, constant: topAnchorConst)
+            segmentTypeControl.topAnchor.constraint(equalTo: habitTypeView.topAnchor, constant: Constants.segmentTopAnchor)
         ])
     }
     

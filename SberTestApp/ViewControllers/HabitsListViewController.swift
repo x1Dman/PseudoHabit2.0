@@ -9,7 +9,7 @@
 import UIKit
 
 
-final class HabitsListViewController: UIViewController {
+final class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
     
     private enum Constants {
         static let appTitle = "Pseudo's Habits"
@@ -29,12 +29,8 @@ final class HabitsListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupUI()
         prepareHabitsDataForUsage()
-        setupNavBar()
-        setupHabitsTableView()
-        
-        setHabitsTableViewConstraints()
+        setupUI()
     }
     
     func updateHabitsOrder() {
@@ -60,9 +56,16 @@ final class HabitsListViewController: UIViewController {
         habitsTableView.reloadData()
     }
     
-    func setupUI() {
+    func setupView() {
         title = Constants.appTitle
         view.backgroundColor = .white
+        setupNavBar()
+        setupHabitsTableView()
+    }
+    
+    func setupUI() {
+        setupView()
+        setHabitsTableViewConstraints()
     }
     
     func setupNavBar() {
@@ -129,10 +132,9 @@ final class HabitsListViewController: UIViewController {
     
     
     func setHabitsTableViewConstraints() {
-        let topAnchorConst: CGFloat = 10
         habitsTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            habitsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConst),
+            habitsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             habitsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             habitsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             habitsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
