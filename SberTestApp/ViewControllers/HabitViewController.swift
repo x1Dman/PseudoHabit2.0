@@ -47,13 +47,13 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
         setupUI()
     }
     
-    func setupUI() {
+    private func setupUI() {
         view.backgroundColor = .white
         setupView()
         setConstraints()
     }
     
-    func setupView() {
+    private func setupView() {
         setupHabitNameTextField()
         setupHabitMotivationTextField()
         setupAcceptButton()
@@ -61,7 +61,7 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
         setupHabitTypeView()
     }
     
-    func setConstraints() {
+    private func setConstraints() {
         setNameTextFieldConstraints()
         setMotivationTextFieldConstraints()
         setTypeViewConstraints()
@@ -69,25 +69,25 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
         setSegmentedControlConstraints()
     }
     
-    func setupSegmentControl() {
+    private func setupSegmentControl() {
         segmentTypeControl.frame = CGRect(x: Constants.segmentX, y: Constants.segmentY, width: habitTypeView.frame.width, height: Constants.segmentHeight)
         segmentTypeControl.addTarget(self, action: #selector(segmentAction), for: .valueChanged)
         segmentTypeControl.selectedSegmentIndex = Constants.segmentIndex
         habitTypeView.addSubview(segmentTypeControl)
     }
     
-    func setupAcceptButton() {
+    private func setupAcceptButton() {
         acceptButton.setTitle(Constants.acceptButtonText, for: .normal)
         acceptButton.addTarget(self, action: #selector(acceptClicked), for: .touchUpInside)
         habitTypeView.addSubview(acceptButton)
     }
     
-    func setupHabitTypeView() {
+    private func setupHabitTypeView() {
         habitTypeView.backgroundColor = .blue
         view.addSubview(habitTypeView)
     }
     
-    func setupHabitNameTextField() {
+    private func setupHabitNameTextField() {
         habitNameTextField.text = Constants.initHabitNameText
         habitNameTextField.textAlignment = .center
         habitNameTextField.layer.borderColor = UIColor.black.cgColor
@@ -96,7 +96,7 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(habitNameTextField)
     }
     
-    func setupHabitMotivationTextField() {
+    private func setupHabitMotivationTextField() {
         habitMotivationTextField.backgroundColor = .yellow
         habitMotivationTextField.text = Constants.initHabitMotivationText
         habitMotivationTextField.textAlignment = .center
@@ -130,20 +130,18 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
     
     
     // constraints
-    func setNameTextFieldConstraints () {
+    private func setNameTextFieldConstraints () {
         habitNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate(
-            [
-                habitNameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                habitNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                habitNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                habitNameTextField.heightAnchor.constraint(equalToConstant: Constants.constraint),
-                habitNameTextField.bottomAnchor.constraint(equalTo: habitMotivationTextField.topAnchor)
-            ]
-        )
+        NSLayoutConstraint.activate([
+            habitNameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            habitNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            habitNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            habitNameTextField.heightAnchor.constraint(equalToConstant: Constants.constraint),
+            habitNameTextField.bottomAnchor.constraint(equalTo: habitMotivationTextField.topAnchor)
+        ])
     }
     
-    func setMotivationTextFieldConstraints() {
+    private func setMotivationTextFieldConstraints() {
         habitMotivationTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             habitMotivationTextField.topAnchor.constraint(equalTo: habitNameTextField.bottomAnchor),
@@ -153,7 +151,7 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
         ])
     }
     
-    func setTypeViewConstraints() {
+    private func setTypeViewConstraints() {
         habitTypeView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             habitTypeView.topAnchor.constraint(equalTo: habitMotivationTextField.bottomAnchor),
@@ -162,7 +160,7 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
         ])
     }
     
-    func setAcceptButtonConstraints() {
+    private func setAcceptButtonConstraints() {
         acceptButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             acceptButton.bottomAnchor.constraint(equalTo: habitTypeView.safeAreaLayoutGuide.bottomAnchor),
@@ -171,8 +169,7 @@ final class HabitViewController: UIViewController, UITextFieldDelegate {
         ])
     }
     
-    func setSegmentedControlConstraints() {
-        
+    private func setSegmentedControlConstraints() {
         segmentTypeControl.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             segmentTypeControl.bottomAnchor.constraint(lessThanOrEqualTo: acceptButton.topAnchor, constant: Constants.segmentBotAnchor),

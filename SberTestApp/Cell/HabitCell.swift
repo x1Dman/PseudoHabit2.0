@@ -32,7 +32,7 @@ final class HabitCell: UITableViewCell {
         super.init(coder: coder)
     }
     
-    func setupUI() {
+    private func setupUI() {
         addSubview(habitTitleLabel)
         addSubview(habitTypeView)
     }
@@ -45,12 +45,12 @@ final class HabitCell: UITableViewCell {
         habitTitleLabel.text = habit.habitNameDB
     }
     
-    func setupHabitTitleLabel() {
+    private func setupHabitTitleLabel() {
         habitTitleLabel.numberOfLines = 0
         habitTitleLabel.adjustsFontSizeToFitWidth = true
     }
     
-    func setupHabitTypeView() {
+    private func setupHabitTypeView() {
         
         circle.layer.cornerRadius = circle.frame.height / 2.0
         circle.layer.masksToBounds = true
@@ -58,7 +58,7 @@ final class HabitCell: UITableViewCell {
         habitTypeView.addSubview(circle)
     }
     
-    func setHabitTypeViewConstaints() {
+    private func setHabitTypeViewConstaints() {
         habitTypeView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             habitTypeView.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -68,7 +68,7 @@ final class HabitCell: UITableViewCell {
         ])
     }
     
-    func setHabitTitleLabelConstaints(){
+    private func setHabitTitleLabelConstaints(){
         habitTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             habitTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),

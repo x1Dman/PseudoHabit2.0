@@ -33,22 +33,13 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
         setupUI()
     }
     
-    func updateHabitsOrder() {
+    private func updateHabitsOrder() {
         habits.sort {
             (habit1, habit2) -> Bool in
             return habit1.habitTypeDB > habit2.habitTypeDB
         }
     }
     
-    func prepareHabitsDataForUsage() {
-        habits = fillArrayFromDB()
-        updateHabitsOrder()
-    }
-    
-    func fillArrayFromDB() -> [HabitDB] {
-        guard let habitDB = CoreDataHabitsManager.instance.fetchHabits() else { return [] }
-        return habitDB
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -56,19 +47,29 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
         habitsTableView.reloadData()
     }
     
-    func setupView() {
+    private func prepareHabitsDataForUsage() {
+        habits = fillArrayFromDB()
+        updateHabitsOrder()
+    }
+    
+    private func fillArrayFromDB() -> [HabitDB] {
+        guard let habitDB = CoreDataHabitsManager.instance.getAll() else { return [] }
+        return habitDB
+    }
+    
+    private func setupView() {
         title = Constants.appTitle
         view.backgroundColor = .white
         setupNavBar()
         setupHabitsTableView()
     }
     
-    func setupUI() {
+    private func setupUI() {
         setupView()
         setHabitsTableViewConstraints()
     }
     
-    func setupNavBar() {
+    private func setupNavBar() {
         view.addSubview(navBar)
         navBar.backgroundColor = .white
         navBar.delegate = self as? UINavigationBarDelegate
@@ -86,7 +87,7 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
         navigationController?.pushViewController(destinationViewController, animated: true)
     }
     
-    func addNewHabitInList(habit: HabitDB) {
+    private func addNewHabitInList(habit: HabitDB) {
         habits.append(habit)
     }
     
@@ -108,9 +109,7 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
             dates: dates
         )
         // Mark: Added to DB and list
-        guard let habit = CoreDataHabitsManager.instance.createHabit(
-            withHabitModel: habitModel
-        ) else {
+        guard let habit = CoreDataHabitsManager.instance.create(habitModel) else {
             controller.navigationController?.popViewController(animated: true)
             return
         }
@@ -119,7 +118,7 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
         controller.navigationController?.popViewController(animated: true)
     }
     
-    func setupHabitsTableView() {
+    private func setupHabitsTableView() {
         view.addSubview(habitsTableView)
         // set delegates
         habitsTableView.delegate = self
@@ -130,8 +129,7 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
         habitsTableView.register(HabitCell.self, forCellReuseIdentifier: Constants.habitCell)
     }
     
-    
-    func setHabitsTableViewConstraints() {
+    private func setHabitsTableViewConstraints() {
         habitsTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             habitsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -140,7 +138,6 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
             habitsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    
 }
 
 
@@ -168,6 +165,6 @@ extension HabitsListViewController: UITableViewDelegate, UITableViewDataSource {
         let habit = habits[indexPath.row]
         habits.remove(at: indexPath.row)
         habitsTableView.deleteRows(at: [indexPath], with: .fade)
-        CoreDataHabitsManager.instance.deleteHabit(habit: habit)
+        CoreDataHabitsManager.instance.delete(habit)
     }
 }

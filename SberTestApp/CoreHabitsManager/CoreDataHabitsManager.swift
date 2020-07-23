@@ -9,6 +9,16 @@
 import Foundation
 import CoreData
 
+protocol Manageable {
+    associatedtype Data
+    associatedtype ComfortableData
+    func create(_ data: ComfortableData) -> Data?
+    func get(name: String) -> Data?
+    func getAll() -> [Data]?
+    func update(_ data: Data)
+    func delete(_ data: Data)
+}
+
 final class CoreDataHabitsManager {
     
     private enum Constants {
@@ -33,7 +43,7 @@ final class CoreDataHabitsManager {
         return container
     }()
     
-    func createHabit(withHabitModel habit: HabitModel) -> HabitDB? {
+    private func createHabit(withHabitModel habit: HabitModel) -> HabitDB? {
         let context = persistentContainer.viewContext
         
         guard let newHabit = NSEntityDescription.insertNewObject(forEntityName: Constants.habitDBName, into: context) as? HabitDB else { return nil }
@@ -52,7 +62,7 @@ final class CoreDataHabitsManager {
         }
     }
     
-    func fetchHabits() -> [HabitDB]? {
+    private func fetchHabits() -> [HabitDB]? {
         let context = persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<HabitDB>(entityName: Constants.habitDBName)
         
@@ -65,7 +75,7 @@ final class CoreDataHabitsManager {
         }
     }
     
-    func fetchHabit(withName name: String) -> HabitDB? {
+    private func fetchHabit(withName name: String) -> HabitDB? {
         let context = persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<HabitDB>(entityName: Constants.habitDBName)
         fetchRequest.fetchLimit = 1
@@ -80,7 +90,7 @@ final class CoreDataHabitsManager {
         }
     }
     
-    func updateHabit(habit: HabitDB) {
+    private func updateHabit(habit: HabitDB) {
         let context = persistentContainer.viewContext
         
         do {
@@ -90,7 +100,7 @@ final class CoreDataHabitsManager {
         }
     }
     
-    func deleteHabit(habit: HabitDB){
+    private func deleteHabit(habit: HabitDB){
         let context = persistentContainer.viewContext
         context.delete(habit)
         do {
@@ -115,7 +125,30 @@ final class CoreDataHabitsManager {
             }
         }
     }
-    
 }
 
 
+extension CoreDataHabitsManager: Manageable {
+    func create(_ data: HabitModel) -> HabitDB? {
+        createHabit(withHabitModel: data)
+    }
+    
+    func get(name: String) -> HabitDB? {
+        return fetchHabit(withName: name)
+    }
+    
+    func getAll() -> [HabitDB]? {
+        return fetchHabits()
+    }
+    
+    func update(_ data: HabitDB) {
+        updateHabit(habit: data)
+    }
+    
+    func delete(_ data: HabitDB) {
+        deleteHabit(habit: data)
+    }
+    
+    typealias ComfortableData = HabitModel
+    typealias Data = HabitDB
+}

@@ -42,11 +42,11 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         setupUI()
     }
     
-    func setupDateFormatter() {
+    private func setupDateFormatter() {
         dateFormatter.setFormat(DateFormatConst.dateFormat)
     }
     
-    func setupView() {
+    private func setupView() {
         view.backgroundColor = .white
         
         setupDateFormatter()
@@ -55,24 +55,24 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         setupCalendar()
     }
     
-    func setupUI() {
+    private func setupUI() {
         setupView()
         setConstraints()
     }
     
-    func setConstraints() {
+    private func setConstraints() {
         setTextViewConstraints()
         setCalendarConstraints()
     }
     
-    func setupViewData() {
+    private func setupViewData() {
         habitsName.text = habit.habitNameDB
         habitsMotivation.text = habit.habitsMotivationDB
         viewColor = HabitsType(rawValue: habit.habitTypeDB).color
         dates = habit.datesDB ?? []
     }
     
-    func setupTextView() {
+    private func setupTextView() {
         habitsName.backgroundColor = viewColor.withAlphaComponent(Constants.alpha)
         habitsName.textAlignment = .center
         habitsName.font = UIFont(name: Fonts.titleHabitFont, size: Constants.fontSize)
@@ -87,7 +87,7 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         view.addSubview(acceptHabitButton)
     }
     
-    func setupAcceptButton() {
+    private func setupAcceptButton() {
         acceptHabitButton.frame.size.width = Constants.buttonWidth
         acceptHabitButton.frame.size.height = Constants.buttonHeight
         acceptHabitButton.setTitle(Constants.buttonTitle, for: .normal)
@@ -110,11 +110,11 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
                 habit.datesDB = dates
         }
         
-        CoreDataHabitsManager.instance.updateHabit(habit: habit)
+        CoreDataHabitsManager.instance.update(habit)
         navigationController?.popViewController(animated: true)
     }
     
-    func setupCalendar() {
+    private func setupCalendar() {
         calendar.delegate = self
         // turn off the possible swipes
         calendar.isUserInteractionEnabled = false
@@ -123,7 +123,7 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         view.addSubview(calendar)
     }
     
-    func setViewConstraints() {
+    private func setViewConstraints() {
         habitInfoView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             habitInfoView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -132,7 +132,7 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         ])
     }
     
-    func setTextViewConstraints() {
+    private func setTextViewConstraints() {
         habitsName.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             habitsName.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -149,7 +149,7 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         ])
     }
     
-    func setCalendarConstraints() {
+    private func setCalendarConstraints() {
         calendar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             calendar.topAnchor.constraint(equalTo: habitsMotivation.bottomAnchor),
