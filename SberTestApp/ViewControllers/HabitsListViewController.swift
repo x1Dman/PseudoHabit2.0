@@ -8,7 +8,9 @@
 
 import UIKit
 
-protocol HabitsListProtocol {}
+protocol HabitsListProtocol {
+    var habits: [HabitDB] { get }
+}
 
 final class HabitsListViewController: UIViewController, HabitsViewControllerDelegate, HabitsListProtocol {
     
@@ -22,9 +24,9 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
         static let navBarY: CGFloat = 50
     }
     
-    let habitsTableView = UITableView()
-    let navBar = UINavigationBar(frame: CGRect(x: Constants.navBarX, y: Constants.navBarY, width: UIScreen.main.bounds.width, height: Constants.heightNavBar))
-    let addButton = UIButton(type: .roundedRect)
+    private let habitsTableView = UITableView()
+    private let navBar = UINavigationBar(frame: CGRect(x: Constants.navBarX, y: Constants.navBarY, width: UIScreen.main.bounds.width, height: Constants.heightNavBar))
+    private let addButton = UIButton(type: .roundedRect)
     var habits: [HabitDB] = []
     
     override func viewDidLoad() {
@@ -96,7 +98,6 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
         guard let habitName = controller.habitName else {
             return
         }
-        // added new habbit
         if habits.contains(where: {$0.habitNameDB == habitName}) {
             return
         }

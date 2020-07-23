@@ -12,15 +12,15 @@ import CoreData
 /*
     protocol was made for update/delete/insert in database
  */
-protocol Storable: Error {
+protocol Storable {
     associatedtype ModelDTO
     associatedtype Model
     
-    func create(_ model: ModelDTO) throws -> Model?
-    func get(name: String) throws -> Model?
-    func getAll() throws -> [Model]?
-    func update(_ model: Model) throws
-    func delete(_ model: Model) throws
+    func create(_ model: ModelDTO) -> Model?
+    func get(name: String) -> Model?
+    func getAll() -> [Model]?
+    func update(_ model: Model)
+    func delete(_ model: Model)
 }
 
 final class CoreDataHabitsManager: Storable {
@@ -51,7 +51,7 @@ final class CoreDataHabitsManager: Storable {
     }()
     
     func create(_ model: HabitModel) -> HabitDB? {
-        createHabit(withHabitModel: model)
+        return createHabit(withHabitModel: model)
     }
     
     func get(name: String) -> HabitDB? {

@@ -12,6 +12,7 @@ import UIKit
 protocol HabitsProtocol {
     var habitName: String? { get }
     var habitMotivation: String? { get }
+    var habitType: HabitsType { get }
 }
 
 protocol HabitsViewControllerDelegate: AnyObject {
@@ -39,11 +40,12 @@ final class HabitViewController: UIViewController, UITextFieldDelegate, HabitsPr
     
     weak var delegate: HabitsViewControllerDelegate?
     
-    let segmentTypeControl = UISegmentedControl(items: Constants.segmentItems)
-    let acceptButton = UIButton(type: .roundedRect)
-    let habitNameTextField = UITextField()
-    let habitTypeView = UIView()
-    let habitMotivationTextField = UITextField()
+    private let segmentTypeControl = UISegmentedControl(items: Constants.segmentItems)
+    private let acceptButton = UIButton(type: .roundedRect)
+    private let habitNameTextField = UITextField()
+    private let habitTypeView = UIView()
+    private let habitMotivationTextField = UITextField()
+    
     var habitType: HabitsType = Constants.initHabitTypeValue
     var habitName: String?
     var habitMotivation: String?
@@ -101,7 +103,6 @@ final class HabitViewController: UIViewController, UITextFieldDelegate, HabitsPr
         habitNameTextField.borderStyle = .roundedRect
         habitNameTextField.backgroundColor = Constants.initHabitTypeValue.color
         
-        habitName = habitNameTextField.text
         view.addSubview(habitNameTextField)
     }
     
@@ -135,6 +136,9 @@ final class HabitViewController: UIViewController, UITextFieldDelegate, HabitsPr
     }
     
     @objc private func acceptClicked() {
+        habitName = habitNameTextField.text
+        habitMotivation = habitMotivationTextField.text
+        
         navigationController?.popViewController(animated: true)
         delegate?.addedNewHabitInList(controller: self)
     }

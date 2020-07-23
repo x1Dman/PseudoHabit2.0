@@ -28,15 +28,15 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         static let calendarY: CGFloat = 0
     }
     
-    let habitInfoView = UIView()
-    let habitsMotivation = UITextView()
-    let habitsName = UITextView()
-    let acceptHabitButton = UIButton()
-    let calendar = FSCalendar()
-    let dateFormatter = ObjCDateFormatter()
+    private let habitInfoView = UIView()
+    private let habitsMotivation = UITextView()
+    private let habitsName = UITextView()
+    private let acceptHabitButton = UIButton()
+    private let calendar = FSCalendar()
+    private let dateFormatter = ObjCDateFormatter()
+    private var viewColor = UIColor()
     
     var habit = HabitDB()
-    var viewColor = UIColor()
     var dates: [String] = []
     
     override func viewDidLoad() {
@@ -105,13 +105,18 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         let currentDate = Date()
         guard let acceptedDate = dateFormatter.getDateString(from: currentDate) else { return }
         
-        // adding a new date
+        // fix bug with infinite same dates
+        if dates.contains(acceptedDate) {
+            navigationController?.popViewController(animated: true)
+            return
+        }
+        
         dates.append(acceptedDate)
         habit.datesDB = dates
-        
+        print(dates.count)
         // update dates in main habit array
         for habitElement in habitListVC.habits where habitElement.habitNameDB == habit.habitNameDB {
-                habit.datesDB = dates
+                habitElement.datesDB = dates
         }
         
         CoreDataHabitsManager.instance.update(habit)
