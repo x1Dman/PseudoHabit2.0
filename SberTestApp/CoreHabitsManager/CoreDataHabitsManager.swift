@@ -9,23 +9,30 @@
 import Foundation
 import CoreData
 
-protocol Manageable {
-    associatedtype Data
-    associatedtype ComfortableData
-    func create(_ data: ComfortableData) -> Data?
-    func get(name: String) -> Data?
-    func getAll() -> [Data]?
-    func update(_ data: Data)
-    func delete(_ data: Data)
+/*
+    protocol was made for update/delete/insert in database
+ */
+protocol Storable: Error {
+    associatedtype ModelDTO
+    associatedtype Model
+    
+    func create(_ model: ModelDTO) throws -> Model?
+    func get(name: String) throws -> Model?
+    func getAll() throws -> [Model]?
+    func update(_ model: Model) throws
+    func delete(_ model: Model) throws
 }
 
-final class CoreDataHabitsManager {
+final class CoreDataHabitsManager: Storable {
     
     private enum Constants {
         static let habitModelName = "HabitsModel"
         static let habitDBName = "HabitDB"
         static let equationPredicat = "name == %@"
     }
+    
+    typealias ModelDTO = HabitModel
+    typealias Model = HabitDB
     
     static let instance = CoreDataHabitsManager()
     
@@ -42,6 +49,26 @@ final class CoreDataHabitsManager {
         })
         return container
     }()
+    
+    func create(_ model: HabitModel) -> HabitDB? {
+        createHabit(withHabitModel: model)
+    }
+    
+    func get(name: String) -> HabitDB? {
+        return fetchHabit(withName: name)
+    }
+    
+    func getAll() -> [HabitDB]? {
+        return fetchHabits()
+    }
+    
+    func update(_ model: HabitDB) {
+        updateHabit(habit: model)
+    }
+    
+    func delete(_ model: HabitDB) {
+        deleteHabit(habit: model)
+    }
     
     private func createHabit(withHabitModel habit: HabitModel) -> HabitDB? {
         let context = persistentContainer.viewContext
@@ -125,30 +152,4 @@ final class CoreDataHabitsManager {
             }
         }
     }
-}
-
-
-extension CoreDataHabitsManager: Manageable {
-    func create(_ data: HabitModel) -> HabitDB? {
-        createHabit(withHabitModel: data)
-    }
-    
-    func get(name: String) -> HabitDB? {
-        return fetchHabit(withName: name)
-    }
-    
-    func getAll() -> [HabitDB]? {
-        return fetchHabits()
-    }
-    
-    func update(_ data: HabitDB) {
-        updateHabit(habit: data)
-    }
-    
-    func delete(_ data: HabitDB) {
-        deleteHabit(habit: data)
-    }
-    
-    typealias ComfortableData = HabitModel
-    typealias Data = HabitDB
 }

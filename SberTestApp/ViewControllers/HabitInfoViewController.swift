@@ -9,7 +9,11 @@
 import FSCalendar
 import UIKit
 
-final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCalendarDelegateAppearance {
+protocol HabitInfoProtocol {
+    var habit: HabitDB { get }
+}
+
+final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCalendarDelegateAppearance, HabitInfoProtocol {
     
     enum Constants {
         static let buttonTitle = "Accept Habit"
@@ -42,6 +46,11 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         setupUI()
     }
     
+    private func setupUI() {
+        setupView()
+        setConstraints()
+    }
+    
     private func setupDateFormatter() {
         dateFormatter.setFormat(DateFormatConst.dateFormat)
     }
@@ -53,11 +62,6 @@ final class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCal
         setupViewData()
         setupTextView()
         setupCalendar()
-    }
-    
-    private func setupUI() {
-        setupView()
-        setConstraints()
     }
     
     private func setConstraints() {

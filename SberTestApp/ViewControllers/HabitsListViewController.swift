@@ -8,8 +8,9 @@
 
 import UIKit
 
+protocol HabitsListProtocol {}
 
-final class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
+final class HabitsListViewController: UIViewController, HabitsViewControllerDelegate, HabitsListProtocol {
     
     private enum Constants {
         static let appTitle = "Pseudo's Habits"
@@ -29,7 +30,7 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        prepareHabitsDataForUsage()
+        prepareHabitsData()
         setupUI()
     }
     
@@ -47,7 +48,7 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
         habitsTableView.reloadData()
     }
     
-    private func prepareHabitsDataForUsage() {
+    private func prepareHabitsData() {
         habits = fillArrayFromDB()
         updateHabitsOrder()
     }
@@ -92,7 +93,7 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
     }
     
     func addedNewHabitInList(controller: HabitViewController) {
-        guard let habitName = controller.habitNameTextField.text else {
+        guard let habitName = controller.habitName else {
             return
         }
         // added new habbit
@@ -100,7 +101,7 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
             return
         }
         let habitType = controller.habitType
-        let motivationText = controller.habitMotivationTextField.text
+        let motivationText = controller.habitMotivation
         let dates: [String] = []
         let habitModel = HabitModel(
             name: habitName,
