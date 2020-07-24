@@ -8,8 +8,12 @@
 
 import UIKit
 
+/*
+ 
+*/
+
 protocol HabitsListProtocol {
-    var habits: [HabitDB] { get }
+    var habits: [HabitDB] { get set }
 }
 
 final class HabitsListViewController: UIViewController, HabitsViewControllerDelegate, HabitsListProtocol {
@@ -37,10 +41,7 @@ final class HabitsListViewController: UIViewController, HabitsViewControllerDele
     }
     
     private func updateHabitsOrder() {
-        habits.sort {
-            (habit1, habit2) -> Bool in
-            return habit1.habitTypeDB > habit2.habitTypeDB
-        }
+        habits.sort { $0.habitTypeDB > $1.habitTypeDB }
     }
     
     
@@ -166,7 +167,9 @@ extension HabitsListViewController: UITableViewDelegate, UITableViewDataSource {
         // delete phase
         let habit = habits[indexPath.row]
         habits.remove(at: indexPath.row)
-        habitsTableView.deleteRows(at: [indexPath], with: .fade)
         CoreDataHabitsManager.instance.delete(habit)
+        habitsTableView.beginUpdates()
+        habitsTableView.deleteRows(at: [indexPath], with: .automatic)
+        habitsTableView.endUpdates()
     }
 }

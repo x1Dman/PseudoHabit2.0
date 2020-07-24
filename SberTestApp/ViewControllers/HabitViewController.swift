@@ -9,17 +9,12 @@
 
 import UIKit
 
-protocol HabitsProtocol {
-    var habitName: String? { get }
-    var habitMotivation: String? { get }
-    var habitType: HabitsType { get }
-}
 
 protocol HabitsViewControllerDelegate: AnyObject {
     func addedNewHabitInList(controller: HabitViewController)
 }
 
-final class HabitViewController: UIViewController, UITextFieldDelegate, HabitsProtocol {
+final class HabitViewController: UIViewController, UITextFieldDelegate {
     
     // consts
     private enum Constants {
@@ -92,7 +87,7 @@ final class HabitViewController: UIViewController, UITextFieldDelegate, HabitsPr
     }
     
     private func setupHabitTypeView() {
-        habitTypeView.backgroundColor = .blue
+        habitTypeView.backgroundColor = .white
         view.addSubview(habitTypeView)
     }
     
@@ -107,7 +102,7 @@ final class HabitViewController: UIViewController, UITextFieldDelegate, HabitsPr
     }
     
     private func setupHabitMotivationTextField() {
-        habitMotivationTextField.backgroundColor = .yellow
+        habitMotivationTextField.backgroundColor = .white
         habitMotivationTextField.text = Constants.initHabitMotivationText
         habitMotivationTextField.textAlignment = .center
         habitNameTextField.borderStyle = .roundedRect
